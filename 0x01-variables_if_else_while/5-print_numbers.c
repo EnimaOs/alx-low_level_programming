@@ -5,7 +5,7 @@
  */
 
 /**
- * main  function is the Entry Point for this porgram
+ * main - function is the Entry Point for this porgram
  * print 0123456789
  * Return: value is (0)
  */

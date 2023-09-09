@@ -14,6 +14,7 @@
 int main(void)
 {
 	char letter = 97;
+	/*letter != 123 "reapt untile letter == 122"  ingore 'q'and 'e'*/
 	while (letter != 123)
 	{
 		if ((letter != 'q') && (letter != 'e'))

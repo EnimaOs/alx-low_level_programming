@@ -4,12 +4,12 @@
 /*
  * Task 0 - Variables, if, else, while project
  * Purpose : if and else if
- * Mission : checking if 'n' is positive or nigative 
+ * Mission : checking if 'n' is positive or nigative
  */
 
 /**
  * main - function is the Entry Point for porgram
- * checking if 'n' is positive or nigative 
+ * checking if 'n' is positive or nigative
  * Return: value is (0)
  */
 int main(void)

@@ -4,7 +4,7 @@
 /*
  * Task 1 - Variables, if, else, while project
  * Purpose : practice if and else if and how get last digit of the number
- * Mission : checking if 'n' is positive or nigative 
+ * Mission : checking if 'n' is positive or nigative
  *           get last digit of the number
  */
 
