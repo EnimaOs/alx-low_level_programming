@@ -6,12 +6,11 @@
  */
 int _atoi(char *s)
 {
-	unsigned int n= 0, i= 0;
+	unsigned int n = 0, i = 0;
 	char negative, positive;
 
 	positive = 0;
 	negative = 0;
-	
 	while (s[i] != '\0')
 	{
 		if (!((s[i] >= '0') && (s[i] <= '9')) && n > 0)
