@@ -1,5 +1,10 @@
+/*
+ * 0x07. C - Even more pointers, arrays and strings
+ * task 5
+ */
 #include "main.h"
 #include <stdio.h>
+#include <string.h>
 /**
  * _strstr - returns the number of characters in the initial segment
  * @haystack: array refrance
@@ -20,5 +25,7 @@ char *_strstr(char *haystack, char *needle)
 				return (haystack + j);
 		}
 	}
+
 	return (NULL);
+
 }
