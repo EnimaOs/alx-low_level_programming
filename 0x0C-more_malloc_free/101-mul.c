@@ -1,94 +1,98 @@
-#include <stdlib.h>
 #include "main.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /**
- * _atoi - is number
- * @s:s
- * retun true or false
-*/
-int _atoi(char *s)
+ * larger_num - get larger num
+ * @n1: n1
+ * @n2: n2
+ * Return: larger index.
+ */
+int larger_num(char *n1, char *n2)
 {
-	int i, sign, numb;
+	int l1, l2;
 
-	i = 0;
-	sign = 1;
-	numb = 0;
-
-	while (s[i] != '\0')
+	l1 = strlen(n1);
+	l2 = strlen(n2);
+	/*missing cases like 001 19*/
+	if (l1 > l2)
+		return (1);
+	else if (l1 < l2)
+		return (2);
+	else if ((*n1 == '\0') && (*n2 == '\0'))
 	{
-		if (s[i] == '-')
-			sign *= -1;
-		if (s[i] >= '0' && s[i] <= '9')
-		{
-			while (s[i] >= '0' && s[i] <= '9')
-			{
-				numb = (s[i] - '0') * sign + numb * 10;
-				i++;
-			}
-			break;
-		}
-		i++;
+		return (1);
 	}
-	return (numb);
+	else if ((*n1 != '\0') && (*n2 != '\0'))
+	{
+		if (*n1 >= *n2)
+			return (1);
+		if (*n1 < *n2)
+			return (2);
+	}
+	return ((larger_num(n1++, n2++)));
 }
 /**
- * _strlen - len of str
- * @s:s
- * retun i
-*/
-int _strlen(char *s)
+ * is_number - is it number
+ * @n: n1
+ * Return: 1 ture or 0 false
+ */
+int is_number(char *n)
 {
-	int i;
-
-	i = 0;
-	while (*(s + i) != '\0')
+	while (*n)
 	{
-		i++;
+		if (!((*n >= '0') && (*n <= '9')))
+			return (0);
+		n++;
 	}
-	return (i);
+	return (1);
 }
-
 /**
- * main - function with two arguments
+ * mul_number - get larger num
+ * @n1: n1
+ * @n2: n2
+ * Return: larger index.
+ */
+char *mul_number(char *n1, char *n2)
+{
+	char **v;
+
+	(void) v;
+	(void) n1;
+	(void) n2;
+	return (NULL);
+}
+/**
+ * main - multiplies two numbers "arguments"
  * @argc: argument count
- * @argv: argument value
- *
- * Description: program that multiplies two positive numbers
- * Return: value
+ * @argv: argument vector
+ * Return: (0) success or (1) faild
  */
 int main(int argc, char *argv[])
 {
-	int count, len1, len2, t_len, temp1, temp2, *array, *result;
+	int larger, isNumbers;
+	char *total;
 
+	(void) total;
 	if (argc != 3)
 	{
 		printf("Error\n");
 		exit(98);
 	}
-
-	len1 = _strlen(argv[1]);
-	len2 = _strlen(argv[2]);
-	t_len = len1 + len2 - 1;
-
-	array = malloc(sizeof(char) * (len1 + len2 + 1));
-	if (array == NULL)
-		return (NULL);
-
-	len1 -= 1;
-	len2 -= 1;
-	for (count = 1; argv[count] != '\0', count++)
+	isNumbers = is_number(argv[1]) +  is_number(argv[1]);
+	if (isNumbers != 2)
 	{
-		for (; argv[1][len1]; len1--)
-		{
-			temp1 = argv[1][len1 - 1] - '0';
-		}
-		for (; argv[2][len2]; len2--)
-		{
-			temp2 = argv[2][len2 - 1] - '0';
-		}
-		for (; array[t_len] > 0
-		if ((temp1 * temp2) > 9)
-			array[
+		printf("Error\n");
+		exit(98);
 	}
+	larger = larger_num(argv[1], argv[2]);
+
+	if (larger == 1)
+		total = mul_number(argv[1], argv[2]);
+	else
+		total = mul_number(argv[2], argv[1]);
+
+	printf("%lu\n", (atol(argv[1]) * atol(argv[2])));
+	return (0);
 }
