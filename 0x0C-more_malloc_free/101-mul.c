@@ -15,7 +15,6 @@ int larger_num(char *n1, char *n2)
 
 	l1 = strlen(n1);
 	l2 = strlen(n2);
-	/*missing cases like 001 19*/
 	if (l1 > l2)
 		return (1);
 	else if (l1 < l2)
@@ -57,7 +56,6 @@ int is_number(char *n)
 char *mul_number(char *n1, char *n2)
 {
 	char **v;
-
 	(void) v;
 	(void) n1;
 	(void) n2;
@@ -73,7 +71,6 @@ int main(int argc, char *argv[])
 {
 	int larger, isNumbers;
 	char *total;
-
 	(void) total;
 	if (argc != 3)
 	{
