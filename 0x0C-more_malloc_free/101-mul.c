@@ -1,34 +1,67 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+#include <string.h>
 
 /**
- * isNumeric - is it number
- * @str: str
- * Return: true or false.
+ * larger_num - get larger num
+ * @n1: n1
+ * @n2: n2
+ * Return: larger index.
  */
-int isNumeric(const char *str)
+int larger_num(char *n1, char *n2)
 {
-	while (*str)
+	int l1, l2;
+
+	l1 = strlen(n1);
+	l2 = strlen(n2);
+	/*missing cases like 001 19*/
+	if (l1 > l2)
+		return (1);
+	else if (l1 < l2)
+		return (2);
+	else if ((*n1 == '\0') && (*n2 == '\0'))
 	{
-		if (!isdigit(*str))
-		{
+		return (1);
+	}
+	else if ((*n1 != '\0') && (*n2 != '\0'))
+	{
+		if (*n1 >= *n2)
+			return (1);
+		if (*n1 < *n2)
+			return (2);
+	}
+	return ((larger_num(n1++, n2++)));
+}
+/**
+ * is_number - is it number
+ * @n: n1
+ * Return: 1 ture or 0 false
+ */
+int is_number(char *n)
+{
+	while (*n)
+	{
+		if (!((*n >= '0') && (*n <= '9')))
 			return (0);
-		}
-		str++;
+		n++;
 	}
 	return (1);
 }
 /**
- * multiply - multiplies two numbers "arguments"
- * @num1: num1
- * @num2: num2
+ * mul_number - get larger num
+ * @n1: n1
+ * @n2: n2
  * Return: larger index.
  */
-int multiply(int num1, int num2)
+char *mul_number(char *n1, char *n2)
 {
-	return (num1 * num2);
+	char **v;
+
+	(void) v;
+	(void) n1;
+	(void) n2;
+	return (NULL);
 }
 /**
  * main - multiplies two numbers "arguments"
@@ -38,32 +71,28 @@ int multiply(int num1, int num2)
  */
 int main(int argc, char *argv[])
 {
+	int larger, isNumbers;
+	char *total;
+
+	(void) total;
 	if (argc != 3)
 	{
 		printf("Error\n");
-		return (98);
+		exit(98);
 	}
-
-	int num1, num2;
-
-	if (!isNumeric(argv[1]) || !isNumeric(argv[2]))
+	isNumbers = is_number(argv[1]) +  is_number(argv[1]);
+	if (isNumbers != 2)
 	{
 		printf("Error\n");
-		return (98);
+		exit(98);
 	}
+	larger = larger_num(argv[1], argv[2]);
 
-	num1 = atoi(argv[1]);
-	num2 = atoi(argv[2]);
+	if (larger == 1)
+		total = mul_number(argv[1], argv[2]);
+	else
+		total = mul_number(argv[2], argv[1]);
 
-	if (num1 <= 0 || num2 <= 0)
-	{
-		printf("Error\n");
-		return (98);
-	}
-
-	int result = multiply(num1, num2);
-
-	printf("%d\n", result);
-
+	printf("%lu\n", (atol(argv[1]) * atol(argv[2])));
 	return (0);
 }
