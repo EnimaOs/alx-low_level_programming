@@ -3,7 +3,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-
+/**
+ * isNumeric - is it number
+ * @str: str
+ * Return: true or false.
+ */
 int isNumeric(const char *str)
 {
 	while (*str)
@@ -16,12 +20,22 @@ int isNumeric(const char *str)
 	}
 	return (1);
 }
-
+/**
+ * multiply - multiplies two numbers "arguments"
+ * @num1: num1
+ * @num2: num2
+ * Return: larger index.
+ */
 int multiply(int num1, int num2)
 {
 	return (num1 * num2);
 }
-
+/**
+ * main - multiplies two numbers "arguments"
+ * @argc: argument count
+ * @argv: argument vector
+ * Return: (0) success or (1) faild
+ */
 int main(int argc, char *argv[])
 {
 	if (argc != 3)
