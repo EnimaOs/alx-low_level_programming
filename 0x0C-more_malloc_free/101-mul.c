@@ -1,125 +1,244 @@
 #include "main.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
+
 
 /**
- * larger_num - get larger num
- * @n1: n1
- * @n2: n2
- * Return: larger index.
+ * _strlen - size of string
+ * @s: string to measure
+ * Return: size of string
  */
-int larger_num(char *n1, char *n2)
+int _strlen(char *s)
 {
-	int l1, l2;
+	int i;
 
-	l1 = strlen(n1);
-	l2 = strlen(n2);
+	i = 0;
+	while (*(s + i) != '\0')
+		++i;
+	return (i);
+}
 
-	if (l1 > l2)
-		return (1);
-	else if (l1 < l2)
-		return (2);
+/**
+ * checkarg - checks arguments only composed of digits
+ * @s: string to check
+ * Return: -1 if False, number as string stripped of 0 otherwise;
+ */
+char *checkarg(char *s)
+{
+	int i, count, stop;
+
+	i = 0;
+	stop = 0;
+	count = 0;
+	while (*(s + i) != '\0')
+	{
+		if (*(s + i) < '0' || *(s + i) > '9')
+			return (NULL);
+
+		if (stop == 0 && *(s + i) == '0')
+			++count;
+		if (*(s + i) != '0')
+			stop = 1;
+		i++;
+	}
+	return (s + count);
+}
+
+/**
+ * makesecond - create new string, by multiplying values of src by c
+ * @src: string
+ * @l1: length of src
+ * @c: multiplier
+ * @zero: number of 0 to insert in string at the end
+ * Return: pointer to new string, NULL if fails
+ */
+char *makesecond(char *src, int l1,  char c, int zero)
+{
+	int  j, l, retenue, prod;
+	char *second;
+
+	l = l1 + 2 + zero; /*retenue + \0 + nb zeros*/
+	second = malloc(l * sizeof(char));
+	if (second == NULL)
+		return (NULL);
+	second[l - 1] = '\0';
+	while (zero > 0)
+		second[l - 1 - zero--] = '0';
+	j = l1;
+	retenue = 0;
+	while (j > 0)
+	{
+		prod = (src[j - 1] - '0') * (c - '0') + retenue;
+		second[j] = prod % 10 + '0';
+		retenue = prod / 10;
+		j--;
+	}
+	if (retenue > 0)
+		second[j] = retenue + '0';
 	else
-		return (strcmp(n1, n2) >= 0 ? 1 : 2);
+		second[j] = '0';
+	return (second);
 }
 
 /**
- * is_number - is it number
- * @n: n1
- * Return: 1 true or 0 false
+ * _calloc - allocates memory for an array, initializes values to '0'
+ * @nmemb: number of elements
+ * @size: size of each element
+ * Return: pointer to array if success, or NULL
  */
-int is_number(char *n)
+void *_calloc(unsigned int nmemb, unsigned int size)
 {
-	while (*n)
-	{
-		if (!((*n >= '0') && (*n <= '9')))
-			return (0);
-		n++;
-	}
-	return (1);
+	unsigned int i;
+	void *p;
+	char *s;
+
+	if (nmemb == 0 || size == 0)
+		return (NULL);
+
+	p = malloc(size * nmemb);
+	if (p == NULL)
+		return (NULL);
+	s = p;
+	i = 0;
+	while (i < nmemb)
+		*(s + i++) = '0';
+
+	return (p);
 }
 
+
+
 /**
- * mul_number - multiply two numbers as strings
- * @n1: first number as string
- * @n2: second number as string
- * Return: result as a dynamically allocated string
+ * infinite_add - add two numbers given as strings
+ * @n1: this sring is a number
+ * @n2: this string is a number
+ * @r: buffer to put result
+ * @size_r: size of buffer
+ * Return:pointer to buffer with result
  */
-char *mul_number(char *n1, char *n2)
+char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
-	int len1 = strlen(n1);
-	int len2 = strlen(n2);
-	int lenResult = len1 + len2;
-	int *result = calloc(lenResult, sizeof(int));
+	int l1, l2, retenue, sum;
 
-	if (result == NULL)
+	l1 = _strlen(n1);
+	l2 = _strlen(n2);
+	*(r + size_r - 1) = '\0';
+	size_r--;
+	if (l1 > size_r || l2 > size_r || size_r == 0)
+		return (0);
+	if (l1 == size_r && l2 == size_r && (*n1 - '0' + *n2 - '0') > 9)
+		return (0);
+
+	retenue = 0;
+	while (size_r > 0 && (l1 > 0 || l2 > 0))
 	{
-		printf("Error\n");
-		exit(98);
+		if (l1 <= 0)
+			sum =  *(n2 + l2 - 1) - '0' + retenue;
+		else if (l2 <= 0)
+			sum  = *(n1 + l1 - 1) - '0' + retenue;
+		else
+			sum = *(n1 + l1 - 1) - '0' + *(n2 + l2 - 1) - '0' + retenue;
+		retenue = sum / 10;
+		*(r + size_r - 1) = sum % 10 + '0';
+		l1--;
+		l2--;
+		size_r--;
 	}
-
-	for (int i = len1 - 1; i >= 0; i--)
+	if (retenue != 0 && size_r > 0)
 	{
-		for (int j = len2 - 1; j >= 0; j--)
+		*(r + size_r - 1) = retenue + '0';
+	}
+	return (r);
+}
+
+
+/**
+ * _mul - multiply 2 strings made of digits
+ * @s1:first string
+ * @s2:second string
+ * Return: product or NULL
+ */
+char *_mul(char *s1, char *s2)
+{
+
+	int l1, l2, i;
+	char *first, *second, *third;
+
+	l1 = _strlen(s1);
+	l2 = _strlen(s2);
+
+/*loop through 2nd string, produce a new line and add the first and new line*/
+	first = makesecond(s1, l1, s2[l2 - 1], 0);
+	if (first == NULL)
+		return (NULL);
+	if (l2 == 1)
+		return (first);
+	i = 1;
+	while (i < l2)
+	{
+/*make second line*/
+		second = makesecond(s1, l1, s2[l2 - i - 1], i);
+		if (second == NULL)
 		{
-			int digit1 = n1[i] - '0';
-			int digit2 = n2[j] - '0';
-			int product = digit1 * digit2;
-
-			int sum = product + result[i + j + 1];
-
-			result[i + j + 1] = sum % 10;
-			result[i + j] += sum / 10;
+			free(first);
+			return (NULL);
 		}
+		third = _calloc((l1 + 2 + i + 1), sizeof(char));
+		if (third == NULL)
+		{
+			free(second);
+			free(first);
+			return (NULL);
+		}
+		third = infinite_add(second, first, third, l1 + 2 + i + 1);
+		free(second);
+		free(first);
+		first = third;
+		++i;
 	}
-
-	char *resultStr = malloc(lenResult + 1);
-
-	if (resultStr == NULL)
-	{
-		free(result);
-		printf("Error\n");
-		exit(98);
-	}
-
-	for (int i = 0; i < lenResult; i++)
-	{
-		resultStr[i] = result[i] + '0';
-	}
-	resultStr[lenResult] = '\0';
-	free(result);
-	return (resultStr);
+	return (third);
 }
 
+
+/**
+ * main - multiply 2 numbers
+ * @argc: number of arguments
+ * @argv: list of arguments
+ * Return: 0
+ */
 int main(int argc, char *argv[])
 {
-	int larger, isNumbers;
-	char *total;
+	char *mul, *n1, *n2;
 
 	if (argc != 3)
 	{
-		printf("Error\n");
+		puts("Error");
 		exit(98);
 	}
-
-	isNumbers = is_number(argv[1]) && is_number(argv[2]);
-	if (!isNumbers)
+	n1 = checkarg(argv[1]);
+	n2 = checkarg(argv[2]);
+	if (n1 == NULL || n2 == NULL)
 	{
-		printf("Error\n");
+		puts("Error");
 		exit(98);
 	}
 
-	larger = larger_num(argv[1], argv[2]);
-
-	if (larger == 1)
-		total = mul_number(argv[1], argv[2]);
+	if (*n1 == '\0' || *n2 == '\0')
+	{
+		printf("0\n");
+		return (0);
+	}
 	else
-		total = mul_number(argv[2], argv[1]);
+	{
+		mul = _mul(n1, n2);
+		if (mul == NULL)
+		{
+			puts("merde");
+			return (0);
+		}
+	}
 
-	printf("%s\n", total);
-
-	free(total);
-
+	printf("%s\n", checkarg(mul));
+	free(mul);
 	return (0);
 }
