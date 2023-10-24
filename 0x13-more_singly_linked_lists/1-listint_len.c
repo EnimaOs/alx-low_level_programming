@@ -1,26 +1,21 @@
 #include "lists.h"
 /**
- * find_listint_loop - function that finds the loop in a linked list.
- * @head: printer
- * Return: address
+ * listint_len - print list of ints
+ * @h: refrance of list_t "linked list of ints"
+ * Return: list size
  */
-listint_t *find_listint_loop(listint_t *head)
+size_t listint_len(const listint_t *h)
 {
-	listint_t *p, *e;
+	int size;
 
-	if (head == NULL)
-		return (NULL);
-	for (e = head->next; e != NULL; e = e->next)
+	size = 0;
+	if (h == NULL)
+		return (0);
+
+	while (h)
 	{
-		if (e == e->next)
-		{
-			return (e);
-		}
-		for (p = head; p != e; p = p->next)
-		{
-			if (p == e->next)
-				return (e->next);
-		}
+		h = h->next;
+		size++;
 	}
-	return (NULL);
+	return (size);
 }
