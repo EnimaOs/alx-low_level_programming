@@ -1,4 +1,5 @@
 #include "main.h"
+#define BUF_SIZE 1024
 /**
  * read_textfile - eads a text file and prints it to the POSIX standard output.
  * @filename: filename
@@ -7,19 +8,38 @@
  */
 ssize_t read_textfile(const char *filename, size_t letters)
 {
-	int file_descriptor;
-	char *buf;
+if (filename == NULL)
+{
+return (0);
+}
 
-	if (filename == NULL)
-		return (0);
-	file_descriptor = open(filename, O_RDONLY);
-	if (file_descriptor == -1)
-		return (0);
-	buf = malloc(sizeof(char) * letters);
-	letters = read(file_descriptor, buf, letters);
-	if ((size_t) write(STDOUT_FILENO, buf, letters) != letters)
-		return (0);
-	close(file_descriptor);
-	free(buf);
-	return (letters);
+FILE *file = fopen(filename, "r");
+if (file == NULL)
+{
+return (0);
+}
+
+char buffer[BUF_SIZE];
+ssize_t total = 0;
+size_t bytes_to_read = letters;
+ssize_t bytes_read;
+
+while (bytes_to_read > 0 && (bytes_read =
+fread(buffer, 1, BUF_SIZE, file)) > 0)
+{
+ssize_t bytes_written = write(STDOUT_FILENO, buffer,
+(bytes_read < bytes_to_read) ? bytes_read : bytes_to_read);
+
+if (bytes_written <= 0 || bytes_written != bytes_read)
+{
+fclose(file);
+return (0);
+}
+
+bytes_to_read -= bytes_read;
+total += bytes_read;
+}
+
+fclose(file);
+return (total);
 }
