@@ -9,7 +9,6 @@ ssize_t read_textfile(const char *filename, size_t letters)
 {
 	int file_descriptor;
 	char *buf;
-	ssize_t bytes_read, bytes_written;
 
 	if (filename == NULL)
 		return (0);
@@ -17,27 +16,10 @@ ssize_t read_textfile(const char *filename, size_t letters)
 	if (file_descriptor == -1)
 		return (0);
 	buf = malloc(sizeof(char) * letters);
-	if (buf == NULL)
-	{
-		close(file_descriptor);
+	letters = read(file_descriptor, buf, letters);
+	if ((size_t) write(STDOUT_FILENO, buf, letters) != letters)
 		return (0);
-	}
-	bytes_read = read(file_descriptor, buf, letters);
-	if (bytes_read == -1)
-	{
-		close(file_descriptor);
-		free(buf);
-		return (0);
-	}
-	bytes_written = write(STDOUT_FILENO, buf, bytes_read);
-	if (bytes_written != bytes_read)
-	{
-		close(file_descriptor);
-		free(buf);
-		return (0);
-	}
-
 	close(file_descriptor);
 	free(buf);
-	return (bytes_read);
+	return (letters);
 }
